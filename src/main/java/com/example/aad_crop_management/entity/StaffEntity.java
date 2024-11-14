@@ -1,5 +1,7 @@
 package com.example.aad_crop_management.entity;
 
+import com.example.aad_crop_management.enums.Designation;
+import com.example.aad_crop_management.enums.Gender;
 import jakarta.persistence.*;
 
 import javax.management.relation.Role;

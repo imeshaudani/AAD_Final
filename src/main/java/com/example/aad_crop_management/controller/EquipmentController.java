@@ -2,7 +2,10 @@ package com.example.aad_crop_management.controller;
 
 import com.example.aad_crop_management.customObj.EquipmentResponse;
 import com.example.aad_crop_management.dto.impl.EquipmentDTO;
+import com.example.aad_crop_management.exception.DataPersistFailedException;
+import com.example.aad_crop_management.service.EquipmentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
