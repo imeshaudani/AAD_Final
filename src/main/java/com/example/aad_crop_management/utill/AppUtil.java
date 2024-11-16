@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.Base64;
 import java.util.UUID;
 
-public class AppUtil {
+public class AppUtil  {
     private static int vehicleCounter = 0;
     private static int equipmentCounter = 0;
     private static int cropCounter = 0;
