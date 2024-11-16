@@ -14,7 +14,6 @@ import java.awt.*;
 @Table(name = "field")
 
 public class FieldEntity implements SuperEntity{
-
     @Id
     private String fieldCode;
     private String fieldName;

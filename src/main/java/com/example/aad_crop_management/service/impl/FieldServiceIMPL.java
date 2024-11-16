@@ -6,6 +6,7 @@ import com.example.aad_crop_management.dto.impl.FieldDTO;
 import com.example.aad_crop_management.entity.FieldEntity;
 import com.example.aad_crop_management.exception.FieldNotFound;
 import com.example.aad_crop_management.service.FieldService;
+import com.example.aad_crop_management.utill.AppUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.Mapping;

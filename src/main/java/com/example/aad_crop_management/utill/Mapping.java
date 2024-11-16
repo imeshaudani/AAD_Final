@@ -1,11 +1,15 @@
 package com.example.aad_crop_management.utill;
 
+import com.example.aad_crop_management.customObj.CropDetailsResponse;
 import com.example.aad_crop_management.dto.impl.*;
 import com.example.aad_crop_management.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.ui.ModelMap;
 
 import java.util.List;
 
+@Component
 public class Mapping {
     @Autowired
     private ModelMapper modelMapper;
@@ -41,7 +45,11 @@ public class Mapping {
 
     // Field and DTO
     public FieldDTO convertToFieldDTO(FieldEntity fieldEntity) {
-        return modelMapper.map(fieldEntity, FieldDTO.class);
+        FieldDTO dto = modelMapper.map(fieldEntity, FieldDTO.class);
+        dto.setStaffIds(fieldEntity.getStaff() != null
+                ? fieldEntity.getStaff().stream().map(StaffEntity::getStaffId).collect(Collectors.toList())
+                : Collections.emptyList());
+        return dto;
     }
     public FieldEntity convertToFieldEntity(FieldDTO fieldDTO) {
         return modelMapper.map(fieldDTO, FieldEntity.class);
@@ -61,8 +69,33 @@ public class Mapping {
         return modelMapper.map(staffEntities, new TypeToken<List<StaffDTO>>(){}.getType());
     }
 
-    // Generic mapping method
-//    public <D> D map(Object source, Class<D> destinationClass) {
-//        return modelMapper.map(source, destinationClass);
-//    }
+    //CropDetails and DTO
+    public CropDetailsDTO convertToCropDetailsDTO(CropDetailsEntity entity) {
+        CropDetailsDTO dto = modelMapper.map(entity, CropDetailsDTO.class);
+
+        dto.setFieldCodes(entity.getField() != null
+                ? entity.getField().stream().map(FieldEntity::getFieldCode).collect(Collectors.toList())
+                : Collections.emptyList());
+
+        dto.setCropCodes(entity.getCrop() != null
+                ? entity.getCrop().stream().map(CropEntity::getCropCode).collect(Collectors.toList())
+                : Collections.emptyList());
+
+        dto.setStaffIds(entity.getStaff() != null
+                ? entity.getStaff().stream().map(StaffEntity::getStaffId).collect(Collectors.toList())
+                : Collections.emptyList());
+
+        return dto;
+    }
+    public CropDetailsEntity convertToCropDetailsEntity(CropDetailsDTO cropDetailsDTO) {return modelMapper.map(cropDetailsDTO, CropDetailsEntity.class);}
+    public List<CropDetailsDTO> convertCropDetailsToDTOList(List<CropDetailsEntity> cropDetailsEntities) {
+        return cropDetailsEntities.stream().map(this::convertToCropDetailsDTO).collect(Collectors.toList());
+    }
+
+    //User and DTO
+    public UserDTO convertToUserDTO(UserEntity user){return modelMapper.map(user, UserDTO.class);}
+    public UserEntity convertToUserEntity(UserDTO dto){return modelMapper.map(dto, UserEntity.class);}
+    public List<UserDTO> convertUserToDTOList(List<UserEntity> user){
+        return modelMapper.map(user, new TypeToken<List<UserDTO>>(){}.getType());
+    }
 }
