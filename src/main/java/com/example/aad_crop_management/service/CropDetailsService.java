@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface CropDetailsService {
     void saveCropDetails(CropDetailsDTO cropDetailsDTO);
-    List<CropDetailsService> getAllCropDetails();
+    List<CropDetailsDTO> getAllCropDetails();
     CropDetailsResponse getSelectedCropDetail(String logCode);
     void updateCropDetails(CropDetailsDTO updatecropDetailsDTO);
     void deleteCropDetails(String logCode);

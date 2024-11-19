@@ -2,6 +2,7 @@ package com.example.aad_crop_management.controller;
 
 import com.example.aad_crop_management.customObj.CropDetailsResponse;
 import com.example.aad_crop_management.dto.impl.CropDetailsDTO;
+import com.example.aad_crop_management.exception.CropDetailsNotFound;
 import com.example.aad_crop_management.service.CropDetailsService;
 import com.example.aad_crop_management.utill.AppUtil;
 import lombok.RequiredArgsConstructor;
