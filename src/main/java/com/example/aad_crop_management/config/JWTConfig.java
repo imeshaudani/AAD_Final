@@ -1,5 +1,6 @@
 package com.example.aad_crop_management.config;
 
+import com.example.aad_crop_management.service.JWTService;
 import com.example.aad_crop_management.service.UserService;
 import io.micrometer.common.util.StringUtils;
 import jakarta.servlet.FilterChain;
