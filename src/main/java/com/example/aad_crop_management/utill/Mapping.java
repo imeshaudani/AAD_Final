@@ -3,11 +3,15 @@ package com.example.aad_crop_management.utill;
 import com.example.aad_crop_management.customObj.CropDetailsResponse;
 import com.example.aad_crop_management.dto.impl.*;
 import com.example.aad_crop_management.entity.*;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.ModelMap;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class Mapping {
