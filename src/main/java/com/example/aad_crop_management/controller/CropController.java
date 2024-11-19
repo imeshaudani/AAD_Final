@@ -18,6 +18,8 @@ import java.util.List;
 @RestController
 @RequestMapping("api/v1/crop")
 @RequiredArgsConstructor
+
+//@PreAuthorize("hasAnyRole('MANAGER', 'SCIENTIST')")
 public class CropController {
     @Autowired
     private final CropService cropService;
@@ -26,7 +28,7 @@ public class CropController {
     public ResponseEntity<Void> saveCrop(
             @RequestPart("cropCommonName") String cropCommonName,
             @RequestPart("cropScientificName") String cropScientificName,
-            @RequestPart("cropImage") MultipartFile cropImage,
+            @RequestPart("cropImage")MultipartFile cropImage,
             @RequestPart("category") String category,
             @RequestPart("cropSeason") String cropSeason,
             @RequestPart("filedCode") String fieldCode
