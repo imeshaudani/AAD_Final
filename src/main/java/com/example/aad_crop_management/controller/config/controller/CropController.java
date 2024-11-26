@@ -7,6 +7,8 @@ import com.example.aad_crop_management.controller.config.service.CropService;
 import com.example.aad_crop_management.controller.config.util.AppUtil;
 import lombok.RequiredArgsConstructor;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,6 +26,8 @@ public class CropController {
     @Autowired
     private final CropService cropService;
 
+    static Logger logger = LoggerFactory.getLogger(CropController.class);
+
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> saveCrop(
             @RequestPart("cropCommonName") String cropCommonName,
@@ -32,25 +36,28 @@ public class CropController {
             @RequestPart("category") String category,
             @RequestPart("cropSeason") String cropSeason,
             @RequestPart("filedCode") String fieldCode
-            ){
-                try {
-                    String base64CropImage = AppUtil.toBase64CropImage(cropImage);
-                    var cropDTO = new CropDTO();
-                    cropDTO.setCropCode(AppUtil.createCropId());
-                    cropDTO.setCropCommonName(cropCommonName);
-                    cropDTO.setCropScientificName(cropScientificName);
-                    cropDTO.setCropImage(base64CropImage);
-                    cropDTO.setCategory(category);
-                    cropDTO.setCropSeason(cropSeason);
-                    cropDTO.setFieldCode(fieldCode);
+    ){
+        try {
+            String base64CropImage = AppUtil.toBase64CropImage(cropImage);
+            var cropDTO = new CropDTO();
+            cropDTO.setCropCode(AppUtil.createCropId());
+            cropDTO.setCropCommonName(cropCommonName);
+            cropDTO.setCropScientificName(cropScientificName);
+            cropDTO.setCropImage(base64CropImage);
+            cropDTO.setCategory(category);
+            cropDTO.setCropSeason(cropSeason);
+            cropDTO.setFieldCode(fieldCode);
 
-                    cropService.saveCrop(cropDTO);
-                    return new ResponseEntity<>(HttpStatus.CREATED);
-                } catch (CropNotFound e) {
-                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-                } catch (Exception e) {
-                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-                }
+            cropService.saveCrop(cropDTO);
+            logger.info("Crop saved :" + cropDTO);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (CropNotFound e) {
+            logger.error(e.getMessage());
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -74,13 +81,11 @@ public class CropController {
             @RequestPart("updateFieldCode") String updateFieldCode
     ) {
         try {
-            // Convert the crop image to Base64 if provided
             String updateBase64CropImage = null;
             if (updateCropImage != null && !updateCropImage.isEmpty()) {
                 updateBase64CropImage = AppUtil.toBase64CropImage(updateCropImage);
             }
 
-            // Create DTO and set the updated values
             var updateCropDTO = new CropDTO();
             updateCropDTO.setCropCode(cropCode);
             updateCropDTO.setCropCommonName(updateCropCommonName);
@@ -89,17 +94,18 @@ public class CropController {
             updateCropDTO.setCropSeason(updateCropSeason);
             updateCropDTO.setFieldCode(updateFieldCode);
 
-            // If the image is provided, update the crop image
             if (updateBase64CropImage != null) {
                 updateCropDTO.setCropImage(updateBase64CropImage);
             }
 
-            // Call service to update the crop
             cropService.updateCrop(updateCropDTO);
+            logger.info("Crop Updated :" + updateCropDTO);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (CropNotFound e) {
+            logger.error(e.getMessage());
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (Exception e) {
+            logger.error(e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -108,10 +114,13 @@ public class CropController {
     public ResponseEntity<Void> deleteCrop(@PathVariable("cropCode") String cropCode){
         try{
             cropService.deleteCrop(cropCode);
+            logger.info("Crop deleted :" + cropCode);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }catch (CropNotFound e){
+            logger.error(e.getMessage());
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }catch (Exception e){
+            logger.error(e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

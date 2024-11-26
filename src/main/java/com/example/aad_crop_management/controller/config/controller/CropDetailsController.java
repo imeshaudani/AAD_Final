@@ -6,6 +6,8 @@ import com.example.aad_crop_management.controller.config.exception.CropDetailsNo
 import com.example.aad_crop_management.controller.config.service.CropDetailsService;
 import com.example.aad_crop_management.controller.config.util.AppUtil;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -23,14 +25,15 @@ import java.util.List;
 public class CropDetailsController {
     @Autowired
     private final CropDetailsService cropDetailsService;
+    static Logger logger = LoggerFactory.getLogger(CropDetailsController.class);
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> saveCropDetails(
-        @RequestPart("logDetails") String logDetails,
-        @RequestPart("logDate") String logDate,
-        @RequestPart("observedImage") MultipartFile observedImage,
-        @RequestPart("fieldCodes") String fieldCodes,
-        @RequestPart("cropCodes") String cropCodes,
-        @RequestPart("staffIds") String staffIds
+            @RequestPart("logDetails") String logDetails,
+            @RequestPart("logDate") String logDate,
+            @RequestPart("observedImage") MultipartFile observedImage,
+            @RequestPart("fieldCodes") String fieldCodes,
+            @RequestPart("cropCodes") String cropCodes,
+            @RequestPart("staffIds") String staffIds
     ){
         try {
             List<String> fieldCodeList = Arrays.asList(fieldCodes.split(","));
@@ -48,10 +51,13 @@ public class CropDetailsController {
             cropDetailsDTO.setStaffIds(staffIdList);
 
             cropDetailsService.saveCropDetails(cropDetailsDTO);
+            logger.info("Crop Details saved :" + cropDetailsDTO);
             return ResponseEntity.status(HttpStatus.CREATED).build();
         }catch (CropDetailsNotFound e) {
+            logger.error(e.getMessage());
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (Exception e) {
+            logger.error(e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -90,10 +96,13 @@ public class CropDetailsController {
             updatecropDetailsDTO.setStaffIds(staffIdList);
 
             cropDetailsService.updateCropDetails(updatecropDetailsDTO);
+            logger.info("Crop Details Updated :" + updatecropDetailsDTO);
             return ResponseEntity.status(HttpStatus.OK).build();
         } catch (CropDetailsNotFound e) {
+            logger.error(e.getMessage());
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (Exception e) {
+            logger.error(e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -102,10 +111,13 @@ public class CropDetailsController {
     public ResponseEntity<Void> deleteCropDetails(@PathVariable("logCode") String logCode){
         try{
             cropDetailsService.deleteCropDetails(logCode);
+            logger.info("Crop Details deleted :" + logCode);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }catch (CropDetailsNotFound e){
+            logger.error(e.getMessage());
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }catch (Exception e){
+            logger.error(e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

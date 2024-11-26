@@ -7,6 +7,8 @@ import com.example.aad_crop_management.controller.config.exception.DataPersistFa
 import com.example.aad_crop_management.controller.config.exception.EquipmentNotFound;
 import com.example.aad_crop_management.controller.config.service.EquipmentService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,6 +24,8 @@ public class EquipmentController {
     @Autowired
     private final EquipmentService equipmentService;
 
+    static Logger logger = LoggerFactory.getLogger(EquipmentController.class);
+
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> createEquipment(@RequestBody EquipmentDTO equipment){
         if (equipment == null){
@@ -29,10 +33,13 @@ public class EquipmentController {
         }else {
             try {
                 equipmentService.saveEquipment(equipment);
+                logger.info("Equipment saved :" + equipment);
                 return new ResponseEntity<>(HttpStatus.CREATED);
             }catch (DataPersistFailedException e){
+                logger.error(e.getMessage());
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }catch (Exception e){
+                logger.error(e.getMessage());
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
@@ -56,8 +63,10 @@ public class EquipmentController {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
             equipmentService.updateEquipment(equipmentId,equipment);
+            logger.info("Equipment Updated :" + equipment);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }catch (EquipmentNotFound e){
+            logger.error(e.getMessage());
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -66,10 +75,13 @@ public class EquipmentController {
     public ResponseEntity<Void> deleteEquipment(@PathVariable("equipmentId") String equipmentId){
         try{
             equipmentService.deleteEquipment(equipmentId);
+            logger.info("Equipment deleted :" + equipmentId);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }catch (EquipmentNotFound e){
+            logger.error(e.getMessage());
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }catch (Exception e){
+            logger.error(e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
