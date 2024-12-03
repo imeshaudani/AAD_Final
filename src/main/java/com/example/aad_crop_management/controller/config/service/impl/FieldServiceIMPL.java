@@ -38,7 +38,7 @@ public class FieldServiceIMPL implements FieldService {
             fieldEntity.setFieldCode(AppUtil.createFieldId());
         }
 
-        List<StaffEntity> staff = getStaffFromIds(fieldDTO.getStaffIds());
+        List<StaffEntity> staff = getStaffFromIds(fieldDTO.getStaffId());
         fieldEntity.setStaff(staff);
 
         fieldDao.save(fieldEntity);
@@ -81,8 +81,8 @@ public class FieldServiceIMPL implements FieldService {
             fieldEntity.setFieldImage2(updateFieldDTO.getFieldImage2());
         }
 
-        if (updateFieldDTO.getStaffIds() != null && !updateFieldDTO.getStaffIds().isEmpty()) {
-            List<StaffEntity> staffEntities = staffDao.findAllById(updateFieldDTO.getStaffIds());
+        if (updateFieldDTO.getStaffId() != null && !updateFieldDTO.getStaffId().isEmpty()) {
+            List<StaffEntity> staffEntities = staffDao.findAllById(updateFieldDTO.getStaffId());
             fieldEntity.setStaff(staffEntities);
         }
 

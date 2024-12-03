@@ -19,6 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/vehicles")
+@CrossOrigin("*")
 @RequiredArgsConstructor
 public class VehicleController {
     @Autowired
@@ -41,7 +42,7 @@ public class VehicleController {
         }
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "allVehicle", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<VehicleDTO> getAllVehicles() {
         return vehicleService.getAllVehicles();
     }

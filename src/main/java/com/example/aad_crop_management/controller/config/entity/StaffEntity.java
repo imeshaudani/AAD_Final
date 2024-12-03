@@ -39,6 +39,6 @@ public class StaffEntity implements SuperEntity{
     @ManyToMany(mappedBy = "staff")
     private List<FieldEntity> feild;
 
-    @OneToMany(mappedBy = "staff", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "staff", cascade = CascadeType.ALL)
     private List<VehicleEntity> vehicle;
 }

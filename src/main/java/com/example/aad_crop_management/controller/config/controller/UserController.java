@@ -19,6 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/user")
+@CrossOrigin("*")
 @RequiredArgsConstructor
 public class UserController {
     @Autowired
@@ -45,7 +46,7 @@ public class UserController {
         }
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "alluser", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<UserDTO> getAllUsers(){
         return userService.getAllUsers();
     }

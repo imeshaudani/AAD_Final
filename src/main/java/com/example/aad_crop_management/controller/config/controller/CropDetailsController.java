@@ -21,6 +21,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/cropDetails")
+@CrossOrigin("*")
 @RequiredArgsConstructor
 public class CropDetailsController {
     @Autowired
@@ -62,7 +63,7 @@ public class CropDetailsController {
         }
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "allcropdetail",produces = MediaType.APPLICATION_JSON_VALUE)
     public List<CropDetailsDTO> getAllCropDetails(){
         return cropDetailsService.getAllCropDetails();
     }

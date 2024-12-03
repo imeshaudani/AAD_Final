@@ -48,7 +48,7 @@ public class Mapping {
     // Field and DTO
     public FieldDTO convertToFieldDTO(FieldEntity fieldEntity) {
         FieldDTO dto = modelMapper.map(fieldEntity, FieldDTO.class);
-        dto.setStaffIds(fieldEntity.getStaff() != null
+        dto.setStaffId(fieldEntity.getStaff() != null
                 ? fieldEntity.getStaff().stream().map(StaffEntity::getStaffId).collect(Collectors.toList())
                 : Collections.emptyList());
         return dto;

@@ -21,6 +21,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/field")
+@CrossOrigin("*")
 @RequiredArgsConstructor
 public class FieldController {
     @Autowired
@@ -28,27 +29,27 @@ public class FieldController {
     static Logger logger = LoggerFactory.getLogger(FieldController.class);
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> saveField(
-            @RequestPart("fieldName") String fieldName,
-            @RequestPart("latitude") String latitude,
-            @RequestPart("longitude") String longitude,
-            @RequestPart("extentSize") String extentSize,
-            @RequestPart("fieldImage1") MultipartFile fieldImage1,
-            @RequestPart("fieldImage2") MultipartFile fieldImage2,
-            @RequestPart("staffIds") String staffIds
+            @RequestParam("fieldName") String fieldName,
+            @RequestParam("latitude") double latitude,
+            @RequestParam("longitude") double longitude,
+            @RequestParam("extentSize") Double extentSize,
+            @RequestParam("fieldImage1") MultipartFile fieldImage1,
+            @RequestParam("fieldImage2") MultipartFile fieldImage2,
+            @RequestParam("staffIds") String staffIds
     ){
         try{
             List<String> staffIdList = Arrays.asList(staffIds.split(","));
-            Point fieldLocation = new Point(Double.parseDouble(latitude), Double.parseDouble(longitude));
+//            Point fieldLocation = new Point(Double.parseDouble(latitude), Double.parseDouble(longitude));
             String base64FieldImage1 = AppUtil.toBase64FieldImage1(fieldImage1);
             String base64FieldImage2 = AppUtil.toBase64FieldImage2(fieldImage2);
             var fieldDTO = new FieldDTO();
             fieldDTO.setFieldCode(AppUtil.createFieldId());
             fieldDTO.setFieldName(fieldName);
-            fieldDTO.setFieldLocation(fieldLocation);
-            fieldDTO.setExtendSize(Double.parseDouble(extentSize));
+            fieldDTO.setFieldLocation(new Point((int) latitude, (int)longitude));
+            fieldDTO.setExtendSize((extentSize));
             fieldDTO.setFieldImage1(base64FieldImage1);
             fieldDTO.setFieldImage2(base64FieldImage2);
-            fieldDTO.setStaffIds(staffIdList);
+            fieldDTO.setStaffId(staffIdList);
 
             fieldService.saveField(fieldDTO);
             logger.info("Field saved :" + fieldDTO);
@@ -62,7 +63,7 @@ public class FieldController {
         }
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "allfield" , produces = MediaType.APPLICATION_JSON_VALUE)
     public List<FieldDTO> getAllFields(){
         return fieldService.getAllFields();
     }
@@ -101,7 +102,7 @@ public class FieldController {
             updateFieldDTO.setFieldName(fieldName);
             updateFieldDTO.setFieldLocation(new Point(Double.parseDouble(latitude), Double.parseDouble(longitude)));
             updateFieldDTO.setExtendSize(Double.parseDouble(extentSize));
-            updateFieldDTO.setStaffIds(staffIdList);
+            updateFieldDTO.setStaffId(staffIdList);
 
             if (updateBase64FieldImage1 != null) {
                 updateFieldDTO.setFieldImage1(updateBase64FieldImage1);

@@ -18,6 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/staff")
+@CrossOrigin("*")
 @RequiredArgsConstructor
 public class StaffController {
     @Autowired
@@ -44,7 +45,7 @@ public class StaffController {
         }
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "allstaff", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<StaffDTO> getAllStaffs(){
         return staffService.getAllStaffs();
     }

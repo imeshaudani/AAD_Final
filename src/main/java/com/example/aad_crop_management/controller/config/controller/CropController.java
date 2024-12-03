@@ -20,6 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/crop")
+@CrossOrigin("*")
 @RequiredArgsConstructor
 //@PreAuthorize("hasAnyRole('MANAGER', 'SCIENTIST')")
 public class CropController {
@@ -36,6 +37,7 @@ public class CropController {
             @RequestPart("category") String category,
             @RequestPart("cropSeason") String cropSeason,
             @RequestPart("filedCode") String fieldCode
+
     ){
         try {
             String base64CropImage = AppUtil.toBase64CropImage(cropImage);
@@ -60,7 +62,7 @@ public class CropController {
         }
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "allcrop" , produces = MediaType.APPLICATION_JSON_VALUE)
     public List<CropDTO> getAllCrops(){
         return cropService.getAllCrops();
     }

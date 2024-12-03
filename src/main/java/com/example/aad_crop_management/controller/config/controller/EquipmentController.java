@@ -19,6 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/equipment")
+@CrossOrigin("*")
 @RequiredArgsConstructor
 public class EquipmentController {
     @Autowired
@@ -45,7 +46,7 @@ public class EquipmentController {
         }
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "allequipment" , produces = MediaType.APPLICATION_JSON_VALUE)
     public List<EquipmentDTO> getAllEquipments(){
         return equipmentService.getAllEquipments();
     }
